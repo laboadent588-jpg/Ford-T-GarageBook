@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#30231c"><meta name="description" content="Model T Garage Book — libro de servicio y restauración">
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css"><title>Model T Garage Book</title>
+</head>
+<body>
+<div class="app">
+<header class="masthead">
+  <div class="brand">
+    <div class="brand-emblem" aria-label="Emblema Model T"><svg viewBox="0 0 100 100" role="img"><path d="M50 4 91 25 91 74 50 96 9 74 9 25Z" fill="#26372e" stroke="#c49a54" stroke-width="3"/><path d="M50 12 83 30 83 69 50 88 17 69 17 30Z" fill="none" stroke="#ead8b2" stroke-width="1.5"/><circle cx="50" cy="50" r="24" fill="#c49a54"/><circle cx="50" cy="50" r="19" fill="#26372e"/><path d="M29 57h42l-4-11-10-7H43l-8 7Z" fill="#ead8b2"/><circle cx="40" cy="59" r="5" fill="#26372e" stroke="#ead8b2" stroke-width="2"/><circle cx="62" cy="59" r="5" fill="#26372e" stroke="#ead8b2" stroke-width="2"/><path d="M38 37h24" stroke="#ead8b2" stroke-width="2"/></svg></div>
+    <div><div class="brand-title">MODEL T</div><div class="brand-sub">GARAGE · SERVICE · RESTORATION</div></div>
+  </div>
+  <div class="header-right"><span class="era">EST. 1908</span><button id="installBtn" class="install" hidden>↓</button></div>
+</header>
+<main>
+<section class="view active" id="view-home">
+  <div class="hero">
+    <div class="hero-top"><span data-i18n="heroKicker">THE UNIVERSAL CAR</span><span>1908—1927</span></div>
+    <div class="hero-copy"><h1>Ford <em>Model T</em></h1><p data-i18n="heroText">El automóvil que puso el mundo sobre ruedas.</p><div class="vehicle-line"><span id="heroYear">1911</span> · <span id="heroBody">Roadster «Mother-in-Law»</span></div></div>
+    <img id="carIllustration" class="car-illustration" src="./model-t-torpedo-ad.png" data-lib-alt="vehicleIllustrationAlt" alt="Ford Model T Torpedo de 1909, grabado de anuncio de época">
+    <img id="vehiclePhoto" class="car-illustration vehicle-photo" hidden alt="">
+    <div class="hero-stamp">TIN<br><b>LIZZIE</b></div>
+    <div class="hero-foot"><span>MODEL T FORD</span><span>ROADSTER · OPEN TOURING ERA</span></div>
+  </div>
+  <div class="section-title"><div><small data-i18n="overview">GARAGE REGISTER</small><h2 data-i18n="yourCar">Your Model T</h2></div><button class="linkbtn" data-go="vehicle" data-i18n="edit">Edit ↗</button></div>
+  <div class="stats"><article><small data-i18n="odometer">ODOMETER</small><strong id="dashKm">—</strong><span data-i18n="distanceUnit">km recorded</span></article><article><small data-i18n="jobs">WORK LOG</small><strong id="dashJobs">0</strong><span data-i18n="interventions">interventions</span></article><article><small data-i18n="due">NEXT TASK</small><strong id="dashDue">—</strong><span id="dashDueLabel">—</span></article></div>
+  <div class="quick">
+    <button data-go="service"><b>＋</b><span data-i18n="addJob">Record work</span></button>
+    <button data-go="tasks"><b>◷</b><span data-i18n="tasks">Maintenance</span></button>
+    <button data-go="library"><b>▤</b><span data-i18n="library">Library</span></button>
+    <button data-go="restoration"><b>⚒</b><span data-i18n="restoration">Restoration</span></button>
+  </div>
+  <p class="notice" data-i18n="disclaimer">Independent enthusiast project. Not affiliated with Ford. Always identify the exact year, engine and parts fitted before using technical data.</p>
+</section>
+
+<section class="view" id="view-service">
+ <div class="pagehead"><small data-i18n="workbook">WORKSHOP REGISTER</small><h1 data-i18n="serviceTitle">Service book</h1><p data-i18n="serviceIntro">Keep a record of every repair, adjustment and inspection.</p></div>
+ <form id="serviceForm" class="panel formgrid">
+  <label data-i18n="operation">Operation<input name="title" required placeholder="Oil change, ignition adjustment…"></label>
+  <label data-i18n="date">Date<input name="date" type="date" required></label>
+  <label data-i18n="odometerLabel">Odometer<input name="km" type="number" min="0" placeholder="km"></label>
+  <label data-i18n="category">System<select name="category"><option>Engine</option><option>Transmission</option><option>Ignition</option><option>Cooling</option><option>Fuel</option><option>Chassis</option><option>Brakes</option><option>Body</option><option>Electrical</option><option>Other</option></select></label>
+  <label class="full" data-i18n="parts">Parts / references<input name="parts" placeholder="Part number, supplier, material…"></label>
+  <label class="full" data-i18n="notes">Notes<textarea name="notes" rows="3"></textarea></label>
+  <label data-i18n="cost">Cost<input name="cost" type="number" min="0" step="0.01"></label>
+  <div class="full formbuttons"><button class="primary" id="saveService" type="submit" data-i18n="save">Save entry</button><button class="secondary" id="cancelEdit" type="button" hidden data-i18n="cancel">Cancel</button></div>
+ </form>
+ <div class="section-title"><div><small>ARCHIVE</small><h2 data-i18n="history">History</h2></div><button class="linkbtn" id="exportCsv" data-i18n="export">Export CSV ↓</button></div>
+ <div id="history" class="records empty"></div>
+</section>
+
+<section class="view" id="view-tasks">
+ <div class="pagehead"><small>CARE & LUBRICATION</small><h1 data-i18n="tasks">Maintenance</h1><p data-i18n="tasksIntro">Create your own schedule. Early Model T lubrication differs from modern cars.</p></div>
+ <div class="panel callout"><b data-i18n="important">Important historical note</b><p data-i18n="oilNote">The 1919 Ford manual describes an oil reservoir in the transmission/flywheel casing, with level controlled by two petcocks. Do not assume a modern engine sump procedure.</p></div>
+ <div class="panel plan"><div><b data-i18n="starterPlan">Starter checklist</b><p data-i18n="starterDesc">Adds conservative inspection reminders, not factory-prescribed intervals.</p></div><button id="addPlan" class="secondary" data-i18n="addChecklist">Add checklist</button></div>
+ <form id="taskForm" class="panel formgrid">
+  <label class="full" data-i18n="taskName">Task<input name="title" required></label>
+  <label data-i18n="dueDate">Due date<input name="date" type="date"></label>
+  <label data-i18n="dueKm">Due odometer<input name="km" type="number" min="0"></label>
+  <label class="full" data-i18n="notes">Notes<input name="notes"></label>
+  <button class="primary full" type="submit" data-i18n="addTask">Add task +</button>
+ </form>
+ <div class="section-title"><div><small>UPCOMING</small><h2 data-i18n="yourTasks">Your tasks</h2></div></div><div id="taskList" class="records empty"></div>
+</section>
+
+<section class="view" id="view-restoration">
+ <div class="pagehead"><small>RESTORATION WORKSHOP</small><h1 data-i18n="restoration">Restoration</h1><p data-i18n="restorationIntro">Track bodywork, mechanical work, upholstery and provenance.</p></div>
+ <form id="restForm" class="panel formgrid">
+  <label class="full" data-i18n="projectTask">Restoration item<input name="title" required placeholder="Rebuild magneto, renew top, woodwork…"></label>
+  <label data-i18n="stage">Stage<select name="stage"><option>Not started</option><option>In progress</option><option>Waiting for parts</option><option>Completed</option></select></label>
+  <label data-i18n="priority">Priority<select name="priority"><option>Normal</option><option>High</option><option>Critical</option></select></label>
+  <label class="full" data-i18n="details">Details / provenance<textarea name="notes" rows="3"></textarea></label>
+  <label class="full"><span data-lib-i18n="restParts">Parts and part numbers</span><textarea name="parts" rows="2"></textarea></label>
+  <label class="full"><span data-lib-i18n="restRefs">Sources / references</span><textarea name="references" rows="2" placeholder="Manual, page, archive URL, supplier…" data-lib-placeholder="restRefsPlaceholder"></textarea></label>
+  <label class="full"><span data-lib-i18n="restPhotos">Work photos</span><input name="photos" type="file" accept="image/png,image/jpeg,image/gif,image/webp" multiple></label>
+  <button class="primary full" type="submit" data-i18n="addRestoration">Add restoration item</button>
+ </form>
+ <div class="section-title"><div><small>PROJECT REGISTER</small><h2 data-i18n="projectBoard">Project board</h2></div></div><div id="restList" class="records empty"></div>
+</section>
+
+<section class="view" id="view-library">
+ <div class="pagehead"><small>PERIOD DOCUMENTATION</small><h1 data-i18n="library">Library</h1><p data-i18n="libraryIntro">Original Ford literature and manuals. Select the edition that matches your car.</p></div>
+ <div class="panel warning"><b data-i18n="documentWarning">Applicability warning</b><p data-i18n="documentWarningText">A 1919 manual is not automatically correct for a 1909 or 1926 car. Treat every specification as year-specific until verified.</p></div>
+ <section class="panel offline-manual" aria-labelledby="offlineManualTitle">
+  <div class="offline-heading"><div><small data-lib-i18n="offlineLabel">INCLUDED OFFLINE</small><h2 id="offlineManualTitle" data-lib-i18n="offlineManualTitle">Ford Manual for Owners and Operators (1919)</h2></div><a href="documents/ford-manual-1919.txt" download data-lib-i18n="downloadManual">Download text</a></div>
+  <p data-lib-i18n="manualProvenance">Ford Motor Company, 1919 · Project Gutenberg eBook 46206 · English plain-text edition · 2,783 lines. Applicability: this edition only; verify year, serial and equipment.</p>
+  <label class="manual-search-label" for="manualSearch" data-lib-i18n="searchManual">Search inside this offline manual</label>
+  <div class="manual-search"><input id="manualSearch" type="search" autocomplete="off" placeholder="e.g. lubricating system" data-lib-placeholder="searchPlaceholder"><button id="clearManualSearch" class="secondary" type="button" data-lib-i18n="clearSearch">Clear</button></div>
+  <div id="manualSearchStatus" class="manual-status" role="status" aria-live="polite"></div>
+  <ol id="manualSearchResults" class="manual-results"></ol>
+  <details id="manualReader"><summary data-lib-i18n="readManual">Read full manual offline</summary><pre id="manualContent" class="manual-content"></pre></details>
+  <small class="manual-credit"><span data-lib-i18n="sourceLabel">Text source:</span> <a href="https://www.gutenberg.org/ebooks/46206" target="_blank" rel="noopener">Project Gutenberg #46206</a>. <span data-lib-i18n="gutenbergNotice">The edition’s included Project Gutenberg notice and terms are preserved in the text file.</span></small>
+ </section>
+ <section class="panel tech-sheet">
+  <div class="offline-heading"><div><small data-lib-i18n="techLabel">SOURCE-BASED TECHNICAL SHEET</small><h2 data-lib-i18n="techTitle">1919 edition · systems covered</h2></div><span class="source-badge" data-lib-i18n="notTorque">No verified torque values</span></div>
+  <p data-lib-i18n="techApplicability">The source is a 1919 Ford owner/operator manual, not a universal specification for all Model T years or variants. Chapter and printed-page references below identify where to verify each topic.</p>
+  <p id="techYearNotice" class="year-notice" aria-live="polite"></p>
+  <dl class="tech-grid">
+   <div><dt data-lib-i18n="engineTransmission">Engine & transmission</dt><dd data-lib-i18n="refEngine">Engine ch. p. 9; transmission ch. p. 31; rear axle p. 37.</dd></div>
+   <div><dt data-lib-i18n="ignitionFuel">Ignition & fuel</dt><dd data-lib-i18n="refIgnition">Gasoline system ch. p. 21; ignition system ch. p. 25.</dd></div>
+   <div><dt data-lib-i18n="coolingLubrication">Cooling & lubrication</dt><dd data-lib-i18n="refCooling">Cooling system ch. p. 17; lubricating system ch. p. 46.</dd></div>
+   <div><dt data-lib-i18n="chassisBrakes">Running gear & maintenance</dt><dd data-lib-i18n="refChassis">Running gear ch. p. 40; maintenance ch. p. 50. Consult the manual for year-specific procedures.</dd></div>
+  </dl>
+  <p class="torque-note" data-lib-i18n="torqueNote">No torque values were found in this 1919 text. The app intentionally supplies none; consult a year- and component-specific primary source before tightening fasteners.</p>
+  <div class="torque-reference">
+   <div class="torque-reading"><small data-lib-i18n="torqueLabel">Reported tightening reference</small><strong>61 N·m</strong><span>45 ft·lb</span></div>
+   <div><b data-lib-i18n="torqueComponent">Cylinder-head bolts</b><p data-lib-i18n="torqueScope">A 2019 restoration report describes this value on its 1917 Runabout fitted with an aftermarket aluminum high-compression head. This is not a Ford factory specification.</p><a href="https://modeltfordfix.com/installing-a-high-compression-cylinder-head/" target="_blank" rel="noopener" data-lib-i18n="torqueSource">Royce Peterson, Model T Ford Fix · 24 Feb 2019 ↗</a></div>
+  </div>
+  <p class="torque-warning" data-lib-i18n="torqueWarning">Treat this as a source-specific reference, not a general Model T value. Do not apply it to a stock head or unknown bolts; head material, bolt condition, threads, washers and lubrication affect suitability.</p>
+ </section>
+ <div class="doclist">
+  <article class="doc"><span class="docyear">1919</span><div><b>Ford Manual for Owners and Operators</b><p data-i18n="doc1919">Factory owner’s manual · engine, cooling, fuel, ignition, transmission, rear axle, lubrication and maintenance · 62 pages.</p><small data-lib-i18n="doc1919Status">Project Gutenberg · English · bundled text and online edition</small><a href="https://www.gutenberg.org/ebooks/46206" target="_blank" rel="noopener" data-i18n="openDoc">Open manual ↗</a></div></article>
+  <article class="doc"><span class="docyear">1915</span><div><b>Ford Manual for Owners and Operators of Ford Cars</b><p data-i18n="doc1915">Period owner’s manual · 95-page scan listed in the Model T Digital Library.</p><small>Model T Digital Library · English · scanned PDF</small><a href="https://cimorelli.com/mtdl/1915/1915owners.pdf" target="_blank" rel="noopener" data-i18n="openScan">Open scan ↗</a></div></article>
+  <article class="doc"><span class="docyear">1913</span><div><b>Pièces de rechange — Modèle T</b><p data-i18n="doc1913">French-language parts list · 75 pages. Useful for historic French terminology and part identification.</p><small>Model T Digital Library · Français · scanned PDF</small><a href="https://cimorelli.com/mtdl/1913/1913plfrench.pdf" target="_blank" rel="noopener" data-i18n="openScan">Open scan ↗</a></div></article>
+  <article class="doc"><span class="docyear">1925</span><div><b>Ford Model T Service Manual</b><p data-i18n="doc1925">Service manual scan · approximately 296 pages. Later production; check year applicability.</p><small>Manuals.plus / Dezo’s Manuals · English</small><a href="https://manuals.plus/m/467a6954a731ebb57a110b5e04cdd426c1dc27b35273acac3ccd4bc86ebe84b3" target="_blank" rel="noopener" data-i18n="openDoc">Open manual ↗</a></div></article>
+  <article class="doc"><span class="docyear">1911</span><div><b>Instruction Book for Ford Model T Cars</b><p data-i18n="doc1911">Early instruction book listed in the digital archive. Particularly relevant to the early Roadster.</p><small>Model T Digital Library · English · scanned edition</small><a href="https://cimorelli.com/mtdl/1911/1911fordinstbook.pdf" target="_blank" rel="noopener" data-i18n="openScan">Open scan ↗</a></div></article>
+ </div>
+ <div class="panel upload"><h3 data-i18n="yourDocs">Your documents</h3><p data-i18n="yourDocsText">Attach PDFs you have downloaded. They are kept in this browser on this device.</p><label class="filepick"><span data-i18n="attachPdf">＋ Attach PDF</span><input id="pdfUpload" type="file" accept="application/pdf,.pdf"></label><div id="attachedDocs" class="attached"></div></div>
+ <p class="notice" data-i18n="rightsNote">The app links to external digital collections; it does not redistribute their scans. Check each archive’s terms before sharing files.</p>
+</section>
+
+<section class="view" id="view-vehicle">
+ <div class="pagehead"><small>VEHICLE REGISTER</small><h1 data-i18n="vehicleProfile">Vehicle profile</h1><p data-i18n="vehicleIntro">Record the exact year, body and equipment. Model T specifications changed during production.</p></div>
+ <form id="vehicleForm" class="panel formgrid">
+  <label data-i18n="modelYear">Model year<select name="year" id="yearSelect"></select></label>
+  <label data-i18n="bodyStyle">Body style<select name="body" id="bodySelect"><option value="roadster">Roadster · Mother-in-Law / rumble seat</option><option value="runabout">Runabout</option><option value="touring">Touring · 5 seats</option><option value="coupe">Coupe</option><option value="towncar">Town Car</option><option value="delivery">Delivery / commercial</option></select></label>
+  <label data-i18n="serial">Engine / serial number<input name="serial"></label>
+  <label data-i18n="market">Market / origin<input name="market" placeholder="USA, Canada, France…"></label>
+  <label data-i18n="odometerLabel">Odometer<input name="km" type="number" min="0"></label>
+  <label data-i18n="distanceUnits">Distance units<select name="units" id="units"><option value="metric">Metric · km</option><option value="imperial">Imperial · miles</option></select></label>
+  <label data-i18n="language">Language<select name="language" id="language"><option value="es">Español</option><option value="fr">Français</option><option value="en">English</option></select></label>
+  <label data-i18n="engine">Engine<input name="engine" value="2.9 L · 4-cylinder side-valve"></label>
+  <label class="full" data-i18n="equipment">Equipment / modifications<textarea name="equipment" rows="3" placeholder="Starter, magneto, lighting, carburettor, wheels…"></textarea></label>
+  <label class="full photo-control"><span data-lib-i18n="vehiclePhotoLabel">Personal vehicle photo (optional)</span><input id="vehiclePhotoUpload" type="file" accept="image/png,image/jpeg,image/gif,image/webp"><small data-lib-i18n="vehiclePhotoHelp">Stored only on this device; selecting it replaces the period illustration. Clear it to restore the illustration.</small></label>
+  <div class="full photo-buttons"><button class="secondary" id="clearVehiclePhoto" type="button" data-lib-i18n="useIllustration">Use period illustration</button><span id="vehiclePhotoStatus" class="manual-status" aria-live="polite"></span></div>
+  <button class="primary full" type="submit" data-i18n="saveProfile">Save vehicle profile</button>
+ </form>
+ <div class="panel data"><h3 data-i18n="dataManagement">Data management</h3><p data-i18n="dataText">Back up your workshop log, reminders, restoration board and vehicle profile.</p><div class="formbuttons"><button class="secondary" id="backup">↓ <span data-i18n="backup">Backup JSON</span></button><label class="filepick"><span data-i18n="restore">Restore JSON</span><input id="restore" type="file" accept="application/json"></label></div></div>
+</section>
+</main>
+<footer class="credits"><span data-lib-i18n="credits">Creada por Jose David Galiano · Dedicada con cariño a Vicente.</span></footer>
+<nav class="nav">
+<button class="navbtn active" data-view="home"><b>⌂</b><span data-i18n="navHome">Garage</span></button>
+<button class="navbtn" data-view="service"><b>▤</b><span data-i18n="navService">Log</span></button>
+<button class="navbtn" data-view="tasks"><b>◷</b><span data-i18n="navTasks">Care</span></button>
+<button class="navbtn" data-view="library"><b>▧</b><span data-i18n="navLibrary">Books</span></button>
+<button class="navbtn" data-view="vehicle"><b>⚙</b><span data-i18n="navVehicle">Car</span></button>
+</nav>
+<div id="toast" class="toast" role="status"></div>
+</div>
+<script src="app.js"></script>
+<script src="offline-library.js"></script>
+</body></html>
