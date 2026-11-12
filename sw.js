@@ -1,7 +1,7 @@
-const CACHE='model-t-garage-v1.1.7';
+const CACHE='model-t-garage-v1.1.8';
 const FILES=[
  './','./index.html','./styles.css','./app.js','./offline-library.js',
- './manifest.webmanifest','./icon.svg','./icon-192.png','./icon-512.png',
+ './manifest.webmanifest','./icon.svg?v=1.1.8','./icon-192.png?v=1.1.8','./icon-512.png?v=1.1.8',
  './model-t-torpedo-ad.png','./documents/ford-manual-1919.txt'
 ];
 
